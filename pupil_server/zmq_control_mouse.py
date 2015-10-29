@@ -20,16 +20,20 @@ socket.setsockopt(zmq.SUBSCRIBE, '')
 smooth_x, smooth_y = 0.5, 0.5
 
 # specify the name of the surface you want to use
+# in this example we are using a surface named 'screen'
 surface_name = "screen"
 
 while True:
     msg = socket.recv()
+
     items = msg.split("\n") 
     msg_type = items.pop(0)
-    items = dict([i.split(':') for i in items[:-1] ])
+    items = dict([i.split(':',1) for i in items[:-1] ])
+
     if msg_type == 'Gaze':
         try:
             gaze_on_screen = items["realtime gaze on "+surface_name]
+            print gaze_on_screen
             raw_x,raw_y = map(float,gaze_on_screen[1:-1].split(','))
             
             # smoothing out the gaze so the mouse has smoother movement

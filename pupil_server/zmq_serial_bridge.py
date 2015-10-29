@@ -25,7 +25,7 @@ while True:
 
     items = msg.split("\n")
     msg_type = items.pop(0)
-    items = dict([i.split(':') for i in items[:-1] ])
+    items = dict([i.split(':',1) for i in items[:-1] ])
 
     if msg_type == 'Pupil':
         if items.get('norm_pupil', 'None') != "None":

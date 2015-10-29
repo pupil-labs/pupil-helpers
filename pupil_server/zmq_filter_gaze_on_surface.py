@@ -12,14 +12,14 @@ socket = context.socket(zmq.SUB)
 socket.connect("tcp://127.0.0.1:"+port)
 #filter by messages by stating string 'STRING'. '' receives all messages
 socket.setsockopt(zmq.SUBSCRIBE, '')
-surface_name = 'spread'
+surface_name = 'screen'
  
 while True:
     msg = socket.recv()
 
     items = msg.split("\n") 
     msg_type = items.pop(0)
-    items = dict([i.split(':') for i in items[:-1] ])
+    items = dict([i.split(':',1) for i in items[:-1] ])
     
     if msg_type == 'Gaze':
         try:
