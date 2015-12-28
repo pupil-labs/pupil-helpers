@@ -12,6 +12,8 @@ socket = context.socket(zmq.SUB)
 socket.connect("tcp://127.0.0.1:"+port)
 #filter by messages by stating string 'STRING'. '' receives all messages
 socket.setsockopt(zmq.SUBSCRIBE, '')
+
+# in this example the surface is named 'screen'. Replace with your surface name.
 surface_name = 'screen'
  
 while True:

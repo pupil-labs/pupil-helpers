@@ -46,7 +46,7 @@ while True:
             y = 1-y # inverting y so it shows up correctly on screen
             x *= x_dim
             y *= y_dim
-            # PyMouse or MacOS bugfix - can not go to extreme corners because of hot corners?
+            # PyMouse on MacOS bugfix - can not go to extreme corners because of hot corners?
             x = min(x_dim-10, max(10,x))
             y = min(y_dim-10, max(10,y))
 
