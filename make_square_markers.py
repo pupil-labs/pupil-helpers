@@ -58,21 +58,46 @@ def write_marker_png(mId,size):
     cv2.imwrite('marker '+marker_id_str+'.png',m)
 
 
-def write_all_markers_png(size):
-    rows,cols,m_size = 8,8,7
+def write_all_markers_png(width,length):
+    rows,cols,m_size = 6,4,9
     canvas = np.ones((m_size*rows,m_size*cols),dtype=np.uint8)
-    for mid in range(64):
-        marker_with_padding = np.ones((7,7))
-        marker_with_padding[1:-1,1:-1] = encode_marker(mid)
+
+    r_can = m_size*rows
+    c_can = m_size*cols
+
+    print m_size*rows, m_size*cols
+
+    r = 0
+    c = 0
+    for mid in range(24):
+        marker_with_padding = np.ones((9,9))
+        marker_with_padding[2:-2,2:-2] = encode_marker(mid)
         m_size = marker_with_padding.shape[0]
-        r = (mid%rows) * m_size
-        c = (mid/cols) * m_size
+
+        
+
+        #r = (mid%rows) * m_size
+        #c = (mid/cols) * m_size
+
+        print 'marker size', m_size
+        print 'mid%rows', mid%rows, 'mid/cols', mid/cols
+        print 'r, c, mid: ',r, c, mid
+
         canvas[r:r+m_size,c:c+m_size] = marker_with_padding*255
-    canvas = cv2.resize(canvas,(size,size),interpolation=cv2.INTER_NEAREST)
+        print canvas
+
+        r += m_size
+        if r == rows*m_size:
+            r = 0
+            c += m_size
+
+    canvas = cv2.resize(canvas,(width,length),interpolation=cv2.INTER_NEAREST)
     canvas = cv2.cvtColor(canvas,cv2.COLOR_GRAY2BGR)
+    canvas[canvas == 1] = 255
     cv2.imwrite('all_markers.png',canvas)
 
 
 if __name__ == '__main__':
-    write_all_markers_png(2000)
-    write_marker_png(8,800)
+    write_all_markers_png(597,842)
+    for mid in range(48):
+        write_marker_png(mid,80)
