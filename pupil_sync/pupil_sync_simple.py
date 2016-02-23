@@ -60,7 +60,7 @@ if __name__ == '__main__':
                     handle_msg(uuid,name,msg,n)
                 elif msg_type == "JOIN":
                     uid,name,group = cmds
-                    logger.debug("'%s' joinded with uid: %s"%(name,uid))
+                    logger.debug("'%s' joined with uid: %s"%(name,uid))
                 elif msg_type == "EXIT":
                     uid,name = cmds
                     logger.debug("'%s' left with uid: %s"%(name,uid))
