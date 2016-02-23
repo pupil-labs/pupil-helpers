@@ -11,12 +11,11 @@ Its a bit stupid but it shows how to control other pupil capture sessions
 Group is set to 'default group'
 Name is set to 'Script'
 
-All this does is join the group listen to messages and emmit a time sync command every second.
-The sync command is a bit useless but it will show up on all pupils in the same group.
+All this does is join the group listen to messages.
 
 ctrl+c for exit
 
-Have a look at the threaded example if you want to build something with this.
+Have a look at the complete example if you want to build something with this.
 '''
 
 SYNC_TIME_MASTER_ANNOUNCE = "SYNC_TIME_MASTER:"
