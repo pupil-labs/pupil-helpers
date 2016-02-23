@@ -273,7 +273,6 @@ class Pupil_Sync_Node(object):
 
 
     def _handle_msg(self,uuid,name,msg,node):
-
         #Clock Sync master announce logic
         if SYNC_TIME_MASTER_ANNOUNCE in msg:
 
@@ -329,6 +328,8 @@ class Pupil_Sync_Node(object):
                 self.notify_all(notification)
         else:
             logger.warning('Received unknown message pattern. Payload:"%s"'%msg)
+
+
     def _handle_msg_whisper(self,uuid,name,msg,node):
         if TIMESTAMP_REQ in msg:
             node.whisper(UUID(bytes=uuid),TIMESTAMP+'%s'%self.g_pool.capture.get_timestamp())
