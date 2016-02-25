@@ -332,7 +332,7 @@ class Pupil_Sync_Node(object):
 
     def _handle_msg_whisper(self,uuid,name,msg,node):
         if TIMESTAMP_REQ in msg:
-            node.whisper(UUID(bytes=uuid),TIMESTAMP+'%s'%self.g_pool.capture.get_timestamp())
+            node.whisper(UUID(bytes=uuid),TIMESTAMP+'%s'%self.get_time())
         elif TIMESTAMP in msg:
             self.node_timestamps_response(uuid,name,float(msg.replace(TIMESTAMP,"")))
         logger.warning('%s %s %s %s'%(uuid,name,msg,node))
