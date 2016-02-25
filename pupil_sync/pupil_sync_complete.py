@@ -344,7 +344,6 @@ class Pupil_Sync_Node(object):
         """
         if self.time_sync_node:
             self.time_sync_node.terminate()
-        self.deinit_gui()
         self.thread_pipe.send(exit_thread)
         while self.thread_pipe:
             sleep(.01)
