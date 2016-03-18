@@ -5,9 +5,17 @@ You can name the surface what you like in Pupil capture and then write the name 
 """
 import zmq
 import json
+
+# pip install PyUserInput
+# PyMouse is now part of PyUserInput
 from pymouse import PyMouse
-#mouse setup
+
+# mouse setup
 m = PyMouse()
+
+# Note: m.move() is a hack to initialize PyMouse - there must be a better workaround/fix for this 
+m.move(100,100)
+
 x_dim, y_dim = m.screen_size()
 
 #network setup
@@ -42,6 +50,7 @@ while True:
             x = min(x_dim-10, max(10,x))
             y = min(y_dim-10, max(10,y))
 
+            print "%s,%s" %(x,y)
             m.move(x,y)
         except KeyError:
             pass
