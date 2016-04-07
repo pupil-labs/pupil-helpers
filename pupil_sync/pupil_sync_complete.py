@@ -70,13 +70,13 @@ class Pupil_Sync_Node(object):
         self.timebase = 0.0 #this is the time offset
 
 
-    def notify_all(notification):
+    def on_notify(self,notification):
         '''
         this get called when a notification is received. Overwrite as needed.
         '''
         print notification
 
-    def on_notify(self,notification):
+    def notify_all(self,notification):
         '''
         call this to notify other sync nodes use notfication format and add network_propagate:True
         '''
@@ -325,7 +325,7 @@ class Pupil_Sync_Node(object):
                 notification['sync_node_name'] = name
                 notification['sync_node_uuid'] = uuid
                 # Finally we fire it.
-                self.notify_all(notification)
+                self.on_notify(notification)
         else:
             logger.warning('Received unknown message pattern. Payload:"%s"'%msg)
 
