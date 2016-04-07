@@ -70,6 +70,28 @@ class Pupil_Sync_Node(object):
         self.timebase = 0.0 #this is the time offset
 
 
+    def start_recording(self,session_name=""):
+        '''call this to start recording on all other Pupil Sync Nodes
+        '''
+        self.notify_all({'subject':'should_start_recording','session_name':session_name,'network_propagate':True})
+
+    def stop_recording(self):
+        '''call this to start recording on all other Pupil Sync Nodes
+        '''
+        self.notify_all({'subject':'should_stop_recording','network_propagate':True})
+
+
+    def start_calibration(self):
+        '''call this to start recording on all other Pupil Sync Nodes
+        '''
+        self.notify_all({'subject':'should_start_calibration','network_propagate':True})
+
+    def stop_calibration(self):
+        '''call this to start recording on all other Pupil Sync Nodes
+        '''
+        self.notify_all({'subject':'should_stop_calibration','network_propagate':True})
+
+
     def on_notify(self,notification):
         '''
         this get called when a notification is received. Overwrite as needed.
@@ -357,4 +379,8 @@ if __name__ == '__main__':
         sleep(1)
         print node.sync_status_info(),node.get_time()
         node.request_group_timestamps()
+        sleep(1)
+        node.start_recording()
+        sleep(2)
+        node.stop_recording()
 
