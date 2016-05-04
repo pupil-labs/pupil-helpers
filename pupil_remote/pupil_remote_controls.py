@@ -6,6 +6,7 @@ This example demonstrates how to send simple messages to the Pupil Remote plugin
 	'C' start currently selected calibration
 	'c' stop currently selected calibration
 	'T 1234.56' Timesync: make timestamps count form 1234.56 from now on.
+	't' get pupil timestamp
 """
 import zmq
 from time import sleep, time
