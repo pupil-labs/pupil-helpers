@@ -1,7 +1,5 @@
 """
-Receive data from Pupil server broadcast over TCP
-test script to see what the stream looks like
-and for debugging
+Receive data from Pupil server broadcast using ZMQ.
 """
 import zmq
 import json
