@@ -33,5 +33,5 @@ while True:
 
     for pupil_position in pupil_positions:
         pupil_x,pupil_y = pupil_position['norm_pos']
-        client.send( OSCMessage("/pupil/norm_pos", (pupil_y,pupil_y)) )
+        client.send( OSCMessage("/pupil/norm_pos", (pupil_x,pupil_y)) )
 
