@@ -9,41 +9,31 @@ import subprocess as sp
 import sys
 from platform import system
 
+try:
+    from pymouse import PyMouse
+    m = PyMouse()
+    m.move(0,0) # hack to init PyMouse -- still needed
+except ImportError:
+    pass
+
 def set_mouse(x=0,y=0,click=0):
     if system() == "Darwin":
         sp.Popen(["./mac_os_helpers/mouse", "-x", "%s" %x, "-y", "%s" %y, "-click", "%s" %click])
     else:
-        try:
-            from pymouse import PyMouse
-            m = PyMouse()
-            m.move(0,0) # hack to init PyMouse -- still needed
-        except ImportError as e:
-            print "Error: %s" %(e)      
         if click:
             m.click(x,y)
         else:
             m.move(x,y)
 
 def get_screen_size():
-    # returns [width, height]
     screen_size = None
     if system() == "Darwin":
-        screen_size = sp.check_output(["./mac_os_helpers/get_screen_size"])
-        screen_size = screen_size.split(",")
-        screen_size = [float(screen_size[0]),float(screen_size[1])]
+        screen_size = sp.check_output(["./mac_os_helpers/get_screen_size"]).split(",")
+        screen_size = float(screen_size[0]),float(screen_size[1])
     else:
-        try:
-            from pymouse import PyMouse
-            m = PyMouse()
-            screen_size = m.screen_size()
-        except ImportError as e:
-            print "Error: %s" %(e)    
-    
+        screen_size = m.screen_size()
     return screen_size  
 
-# simple test
-# test_x,test_y = get_screen_size()
-# set_mouse(test_x/2.0,test_y/2.0,1)
 
 port = "5000"
 context = zmq.Context()
