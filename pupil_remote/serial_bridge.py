@@ -8,17 +8,19 @@ implementing other messages to be send as well is a matter of renaming the vaiab
 '''
 import zmq
 from msgpack import loads
+from pupil_remote_control import Requester
 
 context = zmq.Context()
-
-#open a req port to talk to pupil
 addr = '127.0.0.1' # remote ip or localhost
-req_port = "50020" # same as in the pupil remote gui
-req = context.socket(zmq.REQ)
-req.connect("tcp://%s:%s" %(addr,req_port))
+req_port = 50020   # same as in the pupil remote gui
+url = "tcp://%s:%s"%(addr,req_port)
+
+# initialize Pupil Remote utility
+req = Requester(context,url)
+
 # ask for the sub port
-req.send('SUB_PORT')
-sub_port = req.recv()
+sub_port = req.send_cmd('SUB_PORT')
+
 # open a sub port to listen to pupil
 sub = context.socket(zmq.SUB)
 sub.connect("tcp://%s:%s" %(addr,sub_port))

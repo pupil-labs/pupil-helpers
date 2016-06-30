@@ -8,6 +8,7 @@ from msgpack import loads
 import subprocess as sp
 import sys
 from platform import system
+from pupil_remote_control import Requester
 
 try:
     #not working on MacOS
@@ -37,13 +38,12 @@ def get_screen_size():
 
 context = zmq.Context()
 #open a req port to talk to pupil
-addr = '127.0.0.1' # remote ip or localhost
-req_port = "50020" # same as in the pupil remote gui
-req = context.socket(zmq.REQ)
-req.connect("tcp://%s:%s" %(addr,req_port))
-# ask for the sub port
-req.send('SUB_PORT')
-sub_port = req.recv()
+addr = '127.0.0.1'                  # remote ip or localhost
+req_port = 50020                    # same as in the pupil remote gui
+url = "tcp://%s:%s"%(addr,req_port)
+req = Requester(context,url)        # initialize Pupil Remote utility
+sub_port = req.send_cmd('SUB_PORT') # ask for the sub port
+
 # open a sub port to listen to pupil
 sub = context.socket(zmq.SUB)
 sub.connect("tcp://%s:%s" %(addr,sub_port))
@@ -80,7 +80,3 @@ while True:
         set_mouse(x,y)
     except KeyError:
         pass
-
-
-
-
