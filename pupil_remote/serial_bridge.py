@@ -1,8 +1,8 @@
 '''
-a script that will replay pupil server messages to serial.
+A script that will relay pupil data to serial.
 
-as implemented here only the pupil_norm_pos is relayed.
-implementing other messages to be send as well is a matter of renaming the vaiables.
+As implemented here only the norm_pos is relayed.
+Implementing other messages to be send as well is a matter of renaming the variables.
 
 
 '''
