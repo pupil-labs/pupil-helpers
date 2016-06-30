@@ -15,13 +15,12 @@ context =  zmq.Context()
 socket = context.socket(zmq.REQ)
 
 # set your IP here
-socket.connect('tcp://10.1.12.162:50020')
+socket.connect('tcp://127.0.0.1:50020')
 t = time()
 socket.send('T 0.0') #set timebase to 0.0
 
 print socket.recv()
 print 'Round trip command delay:', time()-t
-print 'If you need continuous syncing and less latency look at pupil_sync.'
 
 sleep(1)
 socket.send('R')
