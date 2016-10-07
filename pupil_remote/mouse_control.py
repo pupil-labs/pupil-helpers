@@ -38,7 +38,7 @@ def get_screen_size():
 context = zmq.Context()
 #open a req port to talk to pupil
 addr = '127.0.0.1' # remote ip or localhost
-req_port = "50020" # same as in the pupil remote gui
+req_port = "65033" # same as in the pupil remote gui
 req = context.socket(zmq.REQ)
 req.connect("tcp://%s:%s" %(addr,req_port))
 # ask for the sub port
@@ -47,7 +47,7 @@ sub_port = req.recv()
 # open a sub port to listen to pupil
 sub = context.socket(zmq.SUB)
 sub.connect("tcp://%s:%s" %(addr,sub_port))
-sub.setsockopt(zmq.SUBSCRIBE, 'gaze')
+sub.setsockopt(zmq.SUBSCRIBE, 'surface')
 
 smooth_x, smooth_y = 0.5, 0.5
 
@@ -60,26 +60,32 @@ surface_name = "screen"
 while True:
     topic,msg =  sub.recv_multipart()
     gaze_position = loads(msg)
-    try:
-        gaze_on_screen = gaze_position["realtime gaze on "+surface_name]
-        raw_x,raw_y = gaze_on_screen
-        # smoothing out the gaze so the mouse has smoother movement
-        smooth_x += 0.5 * (raw_x-smooth_x)
-        smooth_y += 0.5 * (raw_y-smooth_y)
-        x = smooth_x
-        y = smooth_y
+    if gaze_position['name'] == surface_name:                    
+        gaze_on_screen = gaze_position['gaze_on_srf']
+        if len(gaze_on_screen) > 0:
 
-        y = 1-y # inverting y so it shows up correctly on screen
-        x *= int(x_dim)
-        y *= int(y_dim)
-        # PyMouse or MacOS bugfix - can not go to extreme corners because of hot corners?
-        x = min(x_dim-10, max(10,x))
-        y = min(y_dim-10, max(10,y))
+            # there may be multiple gaze positions per frame, so you could average them
+            # raw_x = sum([i['norm_pos'][0] for i in gaze_on_screen])/len(gaze_on_screen)
+            # raw_y = sum([i['norm_pos'][1] for i in gaze_on_screen])/len(gaze_on_screen)
+            
+            # or just use the most recent gaze position on the surface
+            raw_x,raw_y = gaze_on_screen[-1]['norm_pos']
+            
+            # smoothing out the gaze so the mouse has smoother movement
+            smooth_x += 0.35 * (raw_x-smooth_x)
+            smooth_y += 0.35 * (raw_y-smooth_y)
+            x = smooth_x
+            y = smooth_y
 
-        print "%s,%s" %(x,y)
-        set_mouse(x,y)
-    except KeyError:
-        pass
+            y = 1-y # inverting y so it shows up correctly on screen
+            x *= int(x_dim)
+            y *= int(y_dim)
+            # PyMouse or MacOS bugfix - can not go to extreme corners because of hot corners?
+            x = min(x_dim-10, max(10,x))
+            y = min(y_dim-10, max(10,y))
+
+            # print "%s,%s\n" %(x,y)
+            set_mouse(x,y)
 
 
 
