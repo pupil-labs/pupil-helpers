@@ -17,12 +17,12 @@ req_port = "50020" # same as in the pupil remote gui
 req = context.socket(zmq.REQ)
 req.connect("tcp://%s:%s" %(addr,req_port))
 # ask for the sub port
-req.send('SUB_PORT')
+req.send(b'SUB_PORT')
 sub_port = req.recv()
 # open a sub port to listen to pupil
 sub = context.socket(zmq.SUB)
-sub.connect("tcp://%s:%s" %(addr,sub_port))
-sub.setsockopt(zmq.SUBSCRIBE, 'pupil.')
+sub.connect(b"tcp://%s:%s" %(addr.encode('utf-8'),sub_port))
+sub.setsockopt(zmq.SUBSCRIBE, b'pupil.')
 
 #serial setup
 import serial # if you have not already done so
@@ -32,6 +32,6 @@ while True:
     topic,msg =  sub.recv_multipart()
     pupil_position = loads(msg)
     x,y = pupil_position['norm_pos']
-    print x,y
+    print(x,y)
     ser.write(x)
     ser.write(y)
