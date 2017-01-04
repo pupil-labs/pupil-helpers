@@ -1,31 +1,33 @@
 '''
-a script that will replay pupil server messages to serial.
+A script that will relay pupil data to serial.
 
-as implemented here only the pupil_norm_pos is relayed.
-implementing other messages to be send as well is a matter of renaming the vaiables.
+As implemented here only the norm_pos is relayed.
+Implementing other messages to be send as well is a matter of renaming the variables.
 
 
 '''
 import zmq
 from msgpack import loads
+from pupil_remote_control import Requester
 
 context = zmq.Context()
-
-#open a req port to talk to pupil
 addr = '127.0.0.1' # remote ip or localhost
-req_port = "50020" # same as in the pupil remote gui
-req = context.socket(zmq.REQ)
-req.connect("tcp://%s:%s" %(addr,req_port))
+req_port = 50020   # same as in the pupil remote gui
+url = "tcp://%s:%s"%(addr,req_port)
+
+# initialize Pupil Remote utility
+req = Requester(context,url)
+
 # ask for the sub port
-req.send(b'SUB_PORT')
-sub_port = req.recv()
+sub_port = req.send_cmd('SUB_PORT')
+
 # open a sub port to listen to pupil
 sub = context.socket(zmq.SUB)
 sub.connect(b"tcp://%s:%s" %(addr.encode('utf-8'),sub_port))
 sub.setsockopt(zmq.SUBSCRIBE, b'pupil.')
 
 #serial setup
-import serial # if you have not already done so
+import serial  # if you have not already done so
 ser = serial.Serial('/dev/tty.usbserial', 9600) #point to arduino
 
 while True:

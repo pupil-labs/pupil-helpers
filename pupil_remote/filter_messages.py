@@ -5,7 +5,6 @@ import zmq
 from msgpack import loads
 
 context = zmq.Context()
-
 #open a req port to talk to pupil
 addr = '10.1.10.169' # remote ip or localhost
 req_port = "50020" # same as in the pupil remote gui
@@ -14,6 +13,7 @@ req.connect("tcp://%s:%s" %(addr,req_port))
 # ask for the sub port
 req.send(b'SUB_PORT')
 sub_port = req.recv()
+
 # open a sub port to listen to pupil
 sub = context.socket(zmq.SUB)
 sub.connect(b"tcp://%s:%s" %(addr.encode('utf-8'),sub_port))
