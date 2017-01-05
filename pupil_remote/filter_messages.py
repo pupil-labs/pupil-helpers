@@ -5,30 +5,34 @@ import zmq
 from msgpack import loads
 
 context = zmq.Context()
-#open a req port to talk to pupil
-addr = '10.1.10.169' # remote ip or localhost
-req_port = "50020" # same as in the pupil remote gui
+# open a req port to talk to pupil
+addr = '127.0.0.1'  # remote ip or localhost
+req_port = "50020"  # same as in the pupil remote gui
 req = context.socket(zmq.REQ)
-req.connect("tcp://%s:%s" %(addr,req_port))
+req.connect("tcp://{}:{}".format(addr, req_port))
 # ask for the sub port
-req.send(b'SUB_PORT')
-sub_port = req.recv()
+req.send_string('SUB_PORT')
+sub_port = req.recv_string()
 
 # open a sub port to listen to pupil
 sub = context.socket(zmq.SUB)
-sub.connect(b"tcp://%s:%s" %(addr.encode('utf-8'),sub_port))
+sub.connect("tcp://{}:{}".format(addr, sub_port))
 
 # set subscriptions to topics
 # recv just pupil/gaze/notifications
-# sub.setsockopt(zmq.SUBSCRIBE, 'pupil.')
-sub.setsockopt(zmq.SUBSCRIBE, 'gaze')
-# sub.setsockopt(zmq.SUBSCRIBE, 'notify.')
-# sub.setsockopt(zmq.SUBSCRIBE, 'logging.')
-# or everything
-# sub.setsockopt(zmq.SUBSCRIBE, '')
+sub.setsockopt_string(zmq.SUBSCRIBE, 'pupil.')
+# sub.setsockopt_string(zmq.SUBSCRIBE, 'gaze')
+# sub.setsockopt_string(zmq.SUBSCRIBE, 'notify.')
+# sub.setsockopt_string(zmq.SUBSCRIBE, 'logging.')
+# or everything:
+# sub.setsockopt_string(zmq.SUBSCRIBE, '')
 
 
 while True:
-    topic,msg =  sub.recv_multipart()
-    msg = loads(msg)
-    print("\n",topic,":",msg)
+    try:
+        topic = sub.recv_string()
+        msg = sub.recv()
+        msg = loads(msg, encoding='utf-8')
+        print("\n{}: {}".format(topic, msg))
+    except KeyboardInterrupt:
+        break
