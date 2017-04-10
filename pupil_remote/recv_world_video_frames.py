@@ -25,9 +25,29 @@ sub.connect("tcp://{}:{}".format(addr, sub_port))
 # recv just pupil/gaze/notifications
 sub.setsockopt_string(zmq.SUBSCRIBE, 'frame.')
 
+
+def recv_from_sub():
+    '''Recv a message with topic, payload.
+
+    Topic is a utf-8 encoded string. Returned as unicode object.
+    Payload is a msgpack serialized dict. Returned as a python dict.
+
+    Any addional message frames will be added as a list
+    in the payload dict with key: '__raw_data__' .
+    '''
+    topic = sub.recv_string()
+    payload = loads(sub.recv(), encoding='utf-8')
+    extra_frames = []
+    while sub.get(zmq.RCVMORE):
+        extra_frames.append(sub.recv())
+    if extra_frames:
+        payload['__raw_data__'] = extra_frames
+    return topic, payload
+
+
 while True:
-    topic,msg = sub.recv()
-    if topic == 'frame.world': 
-        img = np.frombuffer(msg['__raw_data__'][0]).reshape(720,1280,3)
-        cv.imshow('test',img)
-        cv2.waitKey()
+    topic, msg = recv_from_sub()
+    if topic == 'frame.world':
+        img = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(720, 1280, 3)
+        cv2.imshow('test', img)
+        cv2.waitKey(1)
