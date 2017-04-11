@@ -48,6 +48,6 @@ def recv_from_sub():
 while True:
     topic, msg = recv_from_sub()
     if topic == 'frame.world':
-        img = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(720, 1280, 3)
+        img = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(msg['height'], msg['width'], 3)
         cv2.imshow('test', img)
         cv2.waitKey(1)
