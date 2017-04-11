@@ -3,7 +3,7 @@ Receive world camera data from Pupil using ZMQ.
 Make sure the frame publisher plugin is loaded and confugured to gray or rgb
 """
 import zmq
-from msgpack import loads
+from msgpack import unpackb, packb
 import numpy as np
 import cv2
 
@@ -16,6 +16,20 @@ req.connect("tcp://{}:{}".format(addr, req_port))
 # ask for the sub port
 req.send_string('SUB_PORT')
 sub_port = req.recv_string()
+
+
+# send notification:
+def notify(notification):
+    """Sends ``notification`` to Pupil Remote"""
+    topic = 'notify.' + notification['subject']
+    payload = packb(notification, use_bin_type=True)
+    req.send_string(topic, flags=zmq.SNDMORE)
+    req.send(payload)
+    return req.recv_string()
+
+
+# Start frame publisher with format BGR
+notify({'subject': 'start_plugin', 'name': 'Frame_Publisher', 'args': {'format': 'bgr'}})
 
 # open a sub port to listen to pupil
 sub = context.socket(zmq.SUB)
@@ -36,7 +50,7 @@ def recv_from_sub():
     in the payload dict with key: '__raw_data__' .
     '''
     topic = sub.recv_string()
-    payload = loads(sub.recv(), encoding='utf-8')
+    payload = unpackb(sub.recv(), encoding='utf-8')
     extra_frames = []
     while sub.get(zmq.RCVMORE):
         extra_frames.append(sub.recv())
