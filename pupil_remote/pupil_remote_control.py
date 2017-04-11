@@ -38,7 +38,7 @@ if __name__ == '__main__':
     print(socket.recv_string())
     print('Round trip command delay:', time()-t)
 
-    # set timebase to 0.0
+    # set current Pupil time to 0.0
     socket.send_string('T 0.0')
     print(socket.recv_string())
 
