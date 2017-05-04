@@ -22,7 +22,7 @@ logging.getLogger('pyre').setLevel(logging.INFO)
 
 class Clock_Service(object):
     """Represents a remote clock service and is sortable by rank."""
-    def __init__(self, uuid,name, rank, port):
+    def __init__(self, uuid, name, rank, port):
         super(Clock_Service, self).__init__()
         self.uuid = uuid
         self.rank = rank
@@ -62,7 +62,7 @@ class Time_Object(object):
         self.base_offset += offset
 
 
-def run_time_sync(time_fn, jump_fn, slew_fn, pts_group):
+def run_time_sync_follower(time_fn, jump_fn, slew_fn, pts_group):
     """Main follower logic"""
 
     # Start Pyre node and find clock services in `pts_group`
@@ -90,14 +90,14 @@ def run_time_sync(time_fn, jump_fn, slew_fn, pts_group):
         # clock service was not encountered before or has changed adding it to leaderboard
         cs = Clock_Service(uuid, name, rank, port)
         heappush(leaderboard, cs)
-        logger.debug('{} added'.format(cs))
+        logger.debug('<{}> added'.format(cs))
 
     def remove_from_leaderboard(uuid):
         """Remove an existing clock service from the leaderboard"""
         for cs in leaderboard:
             if cs.uuid == uuid:
                 leaderboard.remove(cs)
-                logger.debug('{} removed'.format(cs))
+                logger.debug('<{}> removed'.format(cs))
                 break
 
     def evaluate_leaderboard(follower_service):
@@ -114,6 +114,7 @@ def run_time_sync(time_fn, jump_fn, slew_fn, pts_group):
         current_leader = leaderboard[0]
         leader_ep = discovery.peer_address(current_leader.uuid)
         leader_addr = urlparse(leader_ep).netloc.split(':')[0]
+        logger.info('Following <{}>'.format(current_leader))
         if follower_service is None:
             # make new follower
             follower_service = Clock_Sync_Follower(leader_addr,
@@ -159,5 +160,5 @@ def run_time_sync(time_fn, jump_fn, slew_fn, pts_group):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    t = Time_Object(100.)
-    run_time_sync(t.get_time, t.jump_time, t.slew_time, 'time_sync_default')
+    t = Time_Object(0.)
+    run_time_sync_follower(t.get_time, t.jump_time, t.slew_time, 'time_sync_default')
