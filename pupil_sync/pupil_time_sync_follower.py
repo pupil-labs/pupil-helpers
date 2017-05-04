@@ -19,6 +19,12 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 logging.getLogger('pyre').setLevel(logging.INFO)
 
+try:
+    from pyre import __version__
+    assert __version__ >= '0.3.1'
+except (ImportError, AssertionError):
+    raise Exception("Pyre version is to old. Please upgrade")
+
 
 class Clock_Service(object):
     """Represents a remote clock service and is sortable by rank."""

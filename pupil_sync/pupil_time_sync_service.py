@@ -19,14 +19,11 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 logging.getLogger('pyre').setLevel(logging.INFO)
 
-pyre_requirement = 'Pyre >= 0.3.1 is required for Time Sync to work'
 try:
     from pyre import __version__
-except ImportError:
-    logger.error(pyre_requirement)
-else:
-    if __version__ < '0.3.1':
-        logger.error(pyre_requirement)
+    assert __version__ >= '0.3.1'
+except (ImportError, AssertionError):
+    raise Exception("Pyre version is to old. Please upgrade")
 
 
 def run_time_sync_service(pts_group, base_bias):
@@ -63,7 +60,7 @@ def run_time_sync_service(pts_group, base_bias):
 
 
 if __name__ == '__main__':
-    if len(sys.argv)  < 2:
+    if len(sys.argv) < 2:
         bias = 1.0
     else:
         bias = float(sys.argv[1])
