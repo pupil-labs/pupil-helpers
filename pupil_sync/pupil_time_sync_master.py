@@ -10,7 +10,6 @@
 
 from time import time
 from pyre import Pyre
-from random import random
 from network_time_sync import Clock_Sync_Master
 
 import logging
@@ -25,12 +24,12 @@ except (ImportError, AssertionError):
     raise Exception("Pyre version is to old. Please upgrade")
 
 
-def run_time_sync_service(pts_group):
+def run_time_sync_master(pts_group):
 
     clock_service = Clock_Sync_Master(time)
 
-    # This example is a clock service only, not a clock follower. \
-    # Therefore the rank is deisgn to always trump all others
+    # This example is a clock service only, not a clock follower.
+    # Therefore the rank is designed to always trump all others.
     rank = 1000
     discovery = Pyre('pupil-helper-service')
     discovery.join(pts_group)
@@ -53,6 +52,7 @@ def run_time_sync_service(pts_group):
         discovery.stop()
         clock_service.stop()
 
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    run_time_sync_service('time_sync_default', bias)
+    run_time_sync_master('time_sync_default')
