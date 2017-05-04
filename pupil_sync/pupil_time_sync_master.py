@@ -8,7 +8,6 @@
 ----------------------------------------------------------------------------------~(*)
 '''
 
-import sys
 from time import time
 from pyre import Pyre
 from random import random
@@ -26,17 +25,13 @@ except (ImportError, AssertionError):
     raise Exception("Pyre version is to old. Please upgrade")
 
 
-def run_time_sync_service(pts_group, base_bias):
+def run_time_sync_service(pts_group):
 
     clock_service = Clock_Sync_Master(time)
 
-    # This example is a clock service only, not a clock follower. Therefore,
-    # it cannot be synced. For simplification, we assume that it has been clock master.
-    has_been_master = 1.
-    has_been_synced = 0.
-    tie_breaker = random()
-    rank = 4*base_bias + 2*has_been_master + has_been_synced + tie_breaker
-
+    # This example is a clock service only, not a clock follower. \
+    # Therefore the rank is deisgn to always trump all others
+    rank = 1000
     discovery = Pyre('pupil-helper-service')
     discovery.join(pts_group)
     discovery.start()
@@ -56,13 +51,8 @@ def run_time_sync_service(pts_group, base_bias):
         logger.info('Leaving "{}" group'.format(pts_group))
         discovery.leave(pts_group)
         discovery.stop()
-        clock_service.terminate()
-
+        clock_service.stop()
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        bias = 1.0
-    else:
-        bias = float(sys.argv[1])
     logging.basicConfig(level=logging.DEBUG)
     run_time_sync_service('time_sync_default', bias)
