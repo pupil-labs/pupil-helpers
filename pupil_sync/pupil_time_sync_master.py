@@ -24,9 +24,9 @@ except (ImportError, AssertionError):
     raise Exception("Pyre version is to old. Please upgrade")
 
 
-def run_time_sync_master(pts_group_prefix):
+def run_time_sync_master(group):
 
-    pts_group = pts_group_prefix + '-time_sync-v0.2'
+    pts_group = group + '-time_sync-v0.2'
     clock_service = Clock_Sync_Master(time)
 
     # This example is a clock service only, not a clock follower.
