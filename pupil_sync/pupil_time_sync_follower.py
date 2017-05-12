@@ -68,10 +68,11 @@ class Time_Object(object):
         self.base_offset += offset
 
 
-def run_time_sync_follower(time_fn, jump_fn, slew_fn, pts_group):
+def run_time_sync_follower(time_fn, jump_fn, slew_fn, pts_group_prefix):
     """Main follower logic"""
 
     # Start Pyre node and find clock services in `pts_group`
+    pts_group = pts_group_prefix + '-time_sync-v0.2'
     discovery = Pyre('pupil-helper-follower')
     discovery.join(pts_group)
     discovery.start()
@@ -167,4 +168,4 @@ def run_time_sync_follower(time_fn, jump_fn, slew_fn, pts_group):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     t = Time_Object(0.)
-    run_time_sync_follower(t.get_time, t.jump_time, t.slew_time, 'time_sync_default')
+    run_time_sync_follower(t.get_time, t.jump_time, t.slew_time, 'default')
