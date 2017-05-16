@@ -72,7 +72,7 @@ def run_time_sync_follower(time_fn, jump_fn, slew_fn, group):
     """Main follower logic"""
 
     # Start Pyre node and find clock services in `pts_group`
-    pts_group = group + '-time_sync-v0.2'
+    pts_group = group + '-time_sync-v0.3'
     discovery = Pyre('pupil-helper-follower')
     discovery.join(pts_group)
     discovery.start()
