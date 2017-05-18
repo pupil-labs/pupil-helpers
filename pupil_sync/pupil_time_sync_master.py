@@ -26,7 +26,7 @@ except (ImportError, AssertionError):
 
 def run_time_sync_master(group):
 
-    pts_group = group + '-time_sync-v0.3'
+    pts_group = group + '-time_sync-v1'
     clock_service = Clock_Sync_Master(time)
 
     # This example is a clock service only, not a clock follower.
