@@ -27,6 +27,9 @@ except (ImportError, AssertionError):
 def run_time_sync_master(group):
 
     pts_group = group + '-time_sync-v1'
+  
+    # the time source in the example is python time.time you can change this.
+    # replace with an implementation that give your custom time in floating sec.
     clock_service = Clock_Sync_Master(time)
 
     # This example is a clock service only, not a clock follower.
