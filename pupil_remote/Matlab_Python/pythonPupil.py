@@ -25,7 +25,7 @@ my_socket.connect(('127.0.0.1', 8821)) # IP TO MATLAB
 context = zmq.Context()
 
 # open a req port to talk to pupil
-addr = '131.215.27.51'  # IP to machine running pupil software
+addr = '192.168.100.1'  # IP to machine running pupil software
 # addr = '192.168.1.25'
 req_port = "50020"  # same as in the pupil remote gui
 req = context.socket(zmq.REQ)
