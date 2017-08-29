@@ -58,6 +58,8 @@ def encode_marker(mId):
 def write_marker_png(mId, size):
     marker_id_str = "%02d" % mId
     m = encode_marker(mId) * 255
+    # if you want to invert markers leave the line below
+    # m = 255 - m
     m = cv2.resize(m, (size, size), interpolation=cv2.INTER_NEAREST)
     m = cv2.cvtColor(m, cv2.COLOR_GRAY2BGR)
     cv2.imwrite('marker ' + marker_id_str + '.png', m)
@@ -79,12 +81,12 @@ def write_all_markers_png(width, length):
         # r = (mid%rows) * m_size
         # c = (mid/cols) * m_size
 
-        print 'marker size', m_size
-        print 'mid%rows', mid % rows, 'mid/cols', mid / cols
-        print 'r, c, mid: ', r, c, mid
+        print('marker size', m_size)
+        print('mid%rows', mid % rows, 'mid/cols', mid / cols)
+        print('r, c, mid: ', r, c, mid)
 
         canvas[r:r + m_size, c:c + m_size] = marker_with_padding * 255
-        print canvas
+        print(canvas)
 
         r += m_size
         if r == rows * m_size:
