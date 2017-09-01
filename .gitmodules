@@ -1,0 +1,6 @@
+[submodule "pupil-for-free-pascal-lazarus/pupil-fpc-examples"]
+	path = pupil-for-free-pascal-lazarus/pupil-fpc-examples
+	url = https://github.com/cpicanco/pupil-fpc-examples
+[submodule "pupil-for-free-pascal-lazarus/pupil-fpc"]
+	path = pupil-for-free-pascal-lazarus/pupil-fpc
+	url = https://github.com/cpicanco/pupil-fpc
