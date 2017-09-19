@@ -18,3 +18,4 @@ Community contributed bindings are listed and linked below. If you have written 
 
 * [MATLAB](https://github.com/matiarj/pupil-helpers/tree/matlabAddV2)
 * [Pascal](https://github.com/cpicanco/pupil-fpc-examples)
+* [OSC](https://github.com/papr/pupil-helpers/tree/oscbridge/pupil_remote/OSC_Python)
