@@ -9,34 +9,24 @@ from msgpack import loads
 import subprocess as sp
 from platform import system
 
-try:
-    # not working on MacOS
+if system() != "Darwin":
     from pymouse import PyMouse
     m = PyMouse()
     m.move(0, 0)  # hack to init PyMouse -- still needed
-except ImportError:
-    pass
 
 
-def set_mouse(x=0, y=0, click=0):
+def move_mouse(x, y):
     if system() == "Darwin":
         sp.Popen(["./mac_os_helpers/mouse", "-x", str(x), "-y", str(y), "-click", str(click)])
     else:
-        if click:
-            m.click(x, y)
-        else:
-            m.move(x, y)
-
+        m.move(x, y)
 
 def get_screen_size():
-    screen_size = None
     if system() == "Darwin":
         screen_size = sp.check_output(["./mac_os_helpers/get_screen_size"]).decode().split(",")
-        screen_size = float(screen_size[0]), float(screen_size[1])
+        return float(screen_size[0]), float(screen_size[1])
     else:
-        screen_size = m.screen_size()
-    return screen_size
-
+        return m.screen_size()
 
 context = zmq.Context()
 # open a req port to talk to pupil
@@ -89,4 +79,4 @@ while True:
             y = min(y_dim-10, max(10, y))
 
             # print "%s,%s\n" %(x,y)
-            set_mouse(x, y)
+            move_mouse(x, y)
