@@ -59,9 +59,18 @@ def recv_from_sub():
     return topic, payload
 
 
+recent_world = None
+recent_eye0 = None
+recent_eye1 = None
+
 while True:
     topic, msg = recv_from_sub()
     if topic == 'frame.world':
-        img = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(msg['height'], msg['width'], 3)
-        cv2.imshow('test', img)
-        cv2.waitKey(1)
+        recent_world = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(msg['height'], msg['width'], 3)
+    elif topic == 'frame.eye.0':
+        recent_eye0 = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(msg['height'], msg['width'], 3)
+    elif topic == 'frame.eye.1':
+        recent_eye1 = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(msg['height'], msg['width'], 3)
+
+    if recent_world is not None and recent_eye0 is not None and recent_eye1 is not None:
+        pass  # here you can do calculation on the 3 most recent world, eye0 and ey1 images
