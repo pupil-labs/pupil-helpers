@@ -48,7 +48,7 @@ if __name__ == '__main__':
     def send_trigger(label, timestamp, duration=0.):
         return notify({'subject': 'annotation', 'label': label,
                       'timestamp': timestamp, 'duration': duration,
-                       'record': True})
+                      'source': 'example_script','record': True})
 
     # Start the annotations plugin
     notify({'subject': 'start_plugin',
