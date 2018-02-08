@@ -45,20 +45,31 @@ if __name__ == '__main__':
         socket.send(payload)
         return socket.recv_string()
 
-    def send_trigger(label, timestamp, duration=0.):
-        return notify({'subject': 'annotation', 'label': label,
-                      'timestamp': timestamp, 'duration': duration,
-                      'source': 'example_script','record': True})
+    def send_trigger(label, timestamp, duration=0., **custom_keys):
+        minimal_trigger = {'subject': 'annotation', 'label': label,
+                           'timestamp': timestamp, 'duration': duration,
+                           'record': True}
+        minimal_trigger.update(custom_keys)
+        return notify(minimal_trigger)
 
     # Start the annotations plugin
     notify({'subject': 'start_plugin',
             'name': 'Annotation_Capture',
             'args': {}})
 
-    sleep(5.)  # sleep for a few seconds, can be less
+    socket.send_string('R')
+    socket.recv_string()
+
+    sleep(1.)  # sleep for a few seconds, can be less
 
     # Send a trigger with the current time
     # The annotation will be saved to the pupil_data notifications if a
     # recording is running. The Annotation_Player plugin will automatically
     # retrieve, display and export all recorded annotations.
-    send_trigger('custom trigger name', timestamp=time_fn())
+    send_trigger('trigger one', timestamp=time_fn(), trigger_one=1)
+    send_trigger('trigger two', timestamp=time_fn(), trigger_two='two')
+    send_trigger('trigger three', timestamp=time_fn(), trigger_one=3, trigger_two='three')
+
+    sleep(1.)  # sleep for a few seconds, can be less
+    socket.send_string('r')
+    socket.recv_string()
