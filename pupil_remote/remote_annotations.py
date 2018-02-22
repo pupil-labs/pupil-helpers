@@ -46,9 +46,6 @@ if __name__ == '__main__':
         return socket.recv_string()
 
     def send_trigger(label, timestamp, duration=0., **custom_keys):
-        minimal_trigger = {'subject': 'annotation', 'label': label,
-                           'timestamp': timestamp, 'duration': duration,
-                           'record': True}
         minimal_trigger.update(custom_keys)
         return notify(minimal_trigger)
 
@@ -66,10 +63,21 @@ if __name__ == '__main__':
     # The annotation will be saved to the pupil_data notifications if a
     # recording is running. The Annotation_Player plugin will automatically
     # retrieve, display and export all recorded annotations.
-    send_trigger('trigger one', timestamp=time_fn(), trigger_one=1)
-    send_trigger('trigger two', timestamp=time_fn(), trigger_two='two')
-    send_trigger('trigger three', timestamp=time_fn(), trigger_one=3, trigger_two='three')
-
+    label = 'custom_annotation_label'
+    duration = 0.
+    minimal_trigger = {'subject': 'annotation', 'label': label,
+                       'timestamp': time_fn(), 'duration': duration,
+                       'record': True}
+    notify(minimal_trigger)
     sleep(1.)  # sleep for a few seconds, can be less
+
+    minimal_trigger = {'subject': 'annotation', 'label': label,
+                       'timestamp': time_fn(), 'duration': duration,
+                       'record': True}
+    # add custom keys to your annotation
+    minimal_trigger['custom_key'] = 'custom value'
+    notify(minimal_trigger)
+    sleep(1.)  # sleep for a few seconds, can be less
+
     socket.send_string('r')
     socket.recv_string()
