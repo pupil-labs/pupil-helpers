@@ -79,4 +79,4 @@ while True:
             y = min(y_dim-10, max(10, y))
 
             # print "%s,%s\n" %(x,y)
-            move_mouse(x, y)
+            move_mouse(int(x), int(y))
