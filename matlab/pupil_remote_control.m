@@ -40,4 +40,17 @@ zmq.core.send(socket, uint8('r'))
 result = zmq.core.recv(socket);
 fprintf('Recording stopped: %s\n', char(result));
 
+% test notification, note that you need to listen on the IPC to receive notifications!
+notify(socket, containers.Map({'subject'}, {'calibration.should_start'}))
+result = zmq.core.recv(socket);
+fprintf('Notification received: %s\n', char(result));
+
+notify(socket, containers.Map({'subject'}, {'calibration.should_stop'}))
+result = zmq.core.recv(socket);
+fprintf('Notification received: %s\n', char(result));
+
+zmq.core.disconnect(socket, endpoint);
+zmq.core.close(socket);
+
 zmq.core.ctx_shutdown(ctx);
+zmq.core.ctx_term(ctx);
