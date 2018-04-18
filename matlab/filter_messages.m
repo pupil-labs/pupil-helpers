@@ -13,6 +13,11 @@
 ctx = zmq.core.ctx_new();
 req_socket = zmq.core.socket(ctx, 'ZMQ_REQ');
 
+% set timeout to 1000ms in order to not get stuck in a blocking
+% mex-call if server is not reachable, see
+% http://api.zeromq.org/4-0:zmq-setsockopt#toc19
+zmq.core.setsockopt(req_socket, 'ZMQ_RCVTIMEO', 1000);
+
 ip_address = '127.0.0.1';
 req_port = '50020';
 req_endpoint =  sprintf('tcp://%s:%s', ip_address, req_port);
@@ -30,9 +35,19 @@ zmq.core.disconnect(req_socket, req_endpoint);
 zmq.core.close(req_socket);
 fprintf('Disconnected from REQ: %s\n', req_endpoint);
 
+if isequal(sub_port, false)
+    warning('No valid sub port received');
+    return;  % exit script
+end
+
 % Create and connect sub socket
 sub_endpoint =  sprintf('tcp://%s:%s', ip_address, sub_port);
 sub_socket = zmq.core.socket(ctx, 'ZMQ_SUB');
+
+% set timeout to 1000ms in order to not get stuck in a blocking
+% mex-call if server is not reachable, see
+% http://api.zeromq.org/4-0:zmq-setsockopt#toc19
+zmq.core.setsockopt(sub_socket, 'ZMQ_RCVTIMEO', 1000);
 
 fprintf('Connecting to SUB: %s\n', sub_endpoint);
 zmq.core.connect(sub_socket, sub_endpoint);

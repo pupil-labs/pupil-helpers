@@ -8,12 +8,17 @@
 %  License details are in the file license.txt, distributed as part of this software.
 % ----------------------------------------------------------------------------------~(*)
 
+% Pupil Remote address
+endpoint =  'tcp://127.0.0.1:50020';
 
 % Setup zmq context and remote helper
 ctx = zmq.core.ctx_new();
 socket = zmq.core.socket(ctx, 'ZMQ_REQ');
 
-endpoint =  'tcp://127.0.0.1:50020';
+% set timeout to 1000ms in order to not get stuck in a blocking
+% mex-call if server is not reachable, see
+% http://api.zeromq.org/4-0:zmq-setsockopt#toc19
+zmq.core.setsockopt(req_socket, 'ZMQ_RCVTIMEO', 1000);
 
 fprintf('Connecting to %s\n', endpoint);
 zmq.core.connect(socket, endpoint);
