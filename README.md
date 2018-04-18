@@ -10,12 +10,4 @@ For more information about plugin development, check out the [Plugin Guide](http
 
 ## Contributing
 
-Pull Requests to this repo should be revisions of existing code, or new example scripts written in Python.
-
-## Bindings
-
-Community contributed bindings are listed and linked below. If you have written tools to communicate with Pupil in a lanugage other than Python, please add a link to your bindings/scripts in the Readme and make a PR. 
-
-* [MATLAB](https://github.com/matiarj/pupil-helpers/tree/matlabAddV2)
-* [Pascal](https://github.com/cpicanco/pupil-fpc-examples)
-* [OSC](https://github.com/papr/pupil-helpers/tree/oscbridge/pupil_remote/OSC_Python)
+Pull Requests to this repo should be revisions of existing code. New examples should be referenced in the [pupil-community](https://github.com/pupil-labs/pupil-community) repository.
