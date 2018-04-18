@@ -1,6 +1,7 @@
-function [ ] = notify( socket, notification )
+function [ ] = send_notification( socket, notification )
 %NOTIFY Use socket to send notification
-%   Detailed explanation goes here
+%   Notifications are container.Map objects that contain
+%   at least the key 'subject'.
 topic = strcat('notify.', notification('subject'));
 payload = dumpmsgpack(notification);
 zmq.core.send(socket, uint8(topic), 'ZMQ_SNDMORE');
