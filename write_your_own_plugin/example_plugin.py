@@ -38,15 +38,13 @@ class Example_Plugin(Plugin):
 
         self.animation_state = 0
 
-    def init_gui(self):
-
+    def init_ui(self):
         # lets make a menu entry in the sidebar
-        self.menu = ui.Growing_Menu('My Plugin')
-        self.g_pool.sidebar.append(self.menu)
+        self.add_menu()
+        self.menu.label = 'My Plugin'
+
         # and a slider
         self.menu.append(ui.Slider('my_var', self, min=1.0))
-        # add a button to close the plugin
-        self.menu.append(ui.Button('close Example_Plugin', self.close))
 
         # this is also a good place to open a custom window:
         # let make the size identical to the img size:
@@ -78,15 +76,15 @@ class Example_Plugin(Plugin):
         gl_utils.adjust_gl_view(w, h)
         glfwMakeContextCurrent(active_window)
 
-    def deinit_gui(self):
-        if self.menu:
-            self.g_pool.sidebar.remove(self.menu)
-            self.menu = None
+    def deinit_ui(self):
+        self.remove_menu()
 
-    def close(self):
-        self.alive = False
+    def recent_events(self, events):
+        if 'frame' in events:
+            frame = events['frame']
+        else:
+            return
 
-    def update(self, frame, events):
         # here we make a reference to the frame so we can use in later in gl_display
         # if we only need a grayscale image its much faster to just do frame.gray
         # instead of converting with opencv
@@ -145,5 +143,4 @@ class Example_Plugin(Plugin):
         This happens either voluntarily or forced.
         if you have a GUI or glfw window destroy it here.
         """
-        self.deinit_gui()
         glfwDestroyWindow(self.window)
