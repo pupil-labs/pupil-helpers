@@ -11,6 +11,8 @@ The provided scripts require the following packages to be installed:
 Make sure that the above packages are included in your Matlab path, as well
 as `recv_message.m` and `send_notification.m`.
 
+The code has been tested with `Matlab R2017a` on Ubuntu 17.10.
+
 ## How to use
 
 1. Clone/copy the matlab folder to your computer
