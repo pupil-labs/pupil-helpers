@@ -60,7 +60,7 @@ def write_marker_png(marker_id, size=80):
     m = encode_marker(marker_id) * 255
     m = cv2.resize(m, (size, size), interpolation=cv2.INTER_NEAREST)
     m = cv2.cvtColor(m, cv2.COLOR_GRAY2BGR)
-    cv2.imwrite('markers_stickersheet/marker_{}.png'.format(marker_id_str), m)
+    cv2.imwrite('marker_{}.png'.format(marker_id_str), m)
 
 
 def write_all_markers_png(width, height):
@@ -90,7 +90,7 @@ def write_all_markers_png(width, height):
                         interpolation=cv2.INTER_NEAREST)
     canvas = cv2.cvtColor(canvas, cv2.COLOR_GRAY2BGR)
     canvas[canvas == 1] = 255
-    cv2.imwrite('markers_stickersheet/all_markers.png', canvas)
+    cv2.imwrite('all_markers.png', canvas)
 
 
 if __name__ == '__main__':
