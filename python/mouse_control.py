@@ -4,6 +4,9 @@ Please note that marker tracking must be enabled, and in this example we have na
 You can name the surface what you like in Pupil capture and then write the name of the surface you'd like to use on line 17.
 """
 
+## install dependencies
+# pip3 install zmq msgpack pyuserinput
+
 import zmq
 from msgpack import loads
 import subprocess as sp
