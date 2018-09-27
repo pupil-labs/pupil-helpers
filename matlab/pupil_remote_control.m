@@ -18,7 +18,7 @@ socket = zmq.core.socket(ctx, 'ZMQ_REQ');
 % set timeout to 1000ms in order to not get stuck in a blocking
 % mex-call if server is not reachable, see
 % http://api.zeromq.org/4-0:zmq-setsockopt#toc19
-zmq.core.setsockopt(req_socket, 'ZMQ_RCVTIMEO', 1000);
+zmq.core.setsockopt(socket, 'ZMQ_RCVTIMEO', 1000);
 
 fprintf('Connecting to %s\n', endpoint);
 zmq.core.connect(socket, endpoint);
