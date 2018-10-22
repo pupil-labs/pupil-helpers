@@ -73,7 +73,6 @@ if __name__ == "__main__":
             "label": label,
             "timestamp": time_fn(),
             "duration": duration,
-            "record": True,
         }
 
     label = "custom_annotation_label"
