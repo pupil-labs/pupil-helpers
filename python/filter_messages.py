@@ -20,7 +20,7 @@ sub.connect("tcp://{}:{}".format(addr, sub_port))
 
 # set subscriptions to topics
 # recv just pupil/gaze/notifications
-sub.setsockopt_string(zmq.SUBSCRIBE, 'pupil.')
+sub.setsockopt_string(zmq.SUBSCRIBE, 'notify.')
 # sub.setsockopt_string(zmq.SUBSCRIBE, 'gaze')
 # sub.setsockopt_string(zmq.SUBSCRIBE, 'notify.')
 # sub.setsockopt_string(zmq.SUBSCRIBE, 'logging.')
