@@ -55,3 +55,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
