@@ -1,0 +1,4 @@
+pylsl
+pandas
+matplotlib
+seaborn
