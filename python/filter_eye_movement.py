@@ -2,7 +2,7 @@
 Receive eye movement classification segments from Pupil using ZMQ.
 """
 import zmq
-from msgpack import loads
+import msgpack
 
 
 addr = "127.0.0.1"  # remote ip or localhost
@@ -36,13 +36,26 @@ sub.setsockopt_string(zmq.SUBSCRIBE, "eye_movement.")  # subscribe to all eye mo
 # sub.setsockopt_string(zmq.SUBSCRIBE, 'eye_movement.smooth_pursuit')  # subscribe only to smooth pursuit classifications
 
 
+def notify(notification):
+    topic = 'notify.' + notification['subject']
+    payload = msgpack.packb(notification, use_bin_type=True)
+    req.send_string(topic, flags=zmq.SNDMORE)
+    req.send(payload)
+    return req.recv_string()
+
+
+# start real-time eye movement classification detector
+notify({'subject': 'start_plugin', 'name': 'Eye_Movement_Detector_Real_Time', 'args': {}})
+print("- (i) Started the Eye_Movement_Detector_Real_Time plugin")
+
+
 print("- (i) Starting the RECV loop:")
 print("-----------------------------")
 while True:
     try:
         topic = sub.recv_string()
         msg = sub.recv()
-        msg = loads(msg, encoding="utf-8")
+        msg = msgpack.loads(msg, encoding="utf-8")
 
         # NOTE: For real-time eye movement, new messages might contain updated information for already received eye movement classification segments.
         print("\n{}: {}".format(topic, msg))
