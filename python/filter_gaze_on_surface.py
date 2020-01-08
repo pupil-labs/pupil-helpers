@@ -32,7 +32,7 @@ while True:
         filtered_surface = {k: v for k, v in surfaces.items() if surfaces['name'] == surface_name}
         try:
             # note that we may have more than one gaze position data point (this is expected behavior)
-            gaze_positions = filtered_surface['gaze_on_srf']
+            gaze_positions = filtered_surface['gaze_on_surfaces']
             for gaze_pos in gaze_positions:
                 norm_gp_x, norm_gp_y = gaze_pos['norm_pos']
 
