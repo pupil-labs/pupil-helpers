@@ -63,4 +63,5 @@ if __name__ == '__main__':
 
     #test notification, note that you need to listen on the IPC to receive notifications!
     notify({'subject':"calibration.should_start"})
+    sleep(5)
     notify({'subject':"calibration.should_stop"})

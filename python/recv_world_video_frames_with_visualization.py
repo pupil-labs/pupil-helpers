@@ -5,6 +5,7 @@ Make sure the frame publisher plugin is loaded and confugured to gray or rgb
 import zmq
 from msgpack import unpackb, packb
 import numpy as np
+import cv2
 
 context = zmq.Context()
 # open a req port to talk to pupil
@@ -62,14 +63,23 @@ recent_world = None
 recent_eye0 = None
 recent_eye1 = None
 
-while True:
-    topic, msg = recv_from_sub()
-    if topic == 'frame.world':
-        recent_world = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(msg['height'], msg['width'], 3)
-    elif topic == 'frame.eye.0':
-        recent_eye0 = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(msg['height'], msg['width'], 3)
-    elif topic == 'frame.eye.1':
-        recent_eye1 = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(msg['height'], msg['width'], 3)
+try:
+    while True:
+        topic, msg = recv_from_sub()
+        if topic == 'frame.world':
+            recent_world = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(msg['height'], msg['width'], 3)
+        elif topic == 'frame.eye.0':
+            recent_eye0 = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(msg['height'], msg['width'], 3)
+        elif topic == 'frame.eye.1':
+            recent_eye1 = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(msg['height'], msg['width'], 3)
 
-    if recent_world is not None and recent_eye0 is not None and recent_eye1 is not None:
-        print(f"here you can do calculation on the 3 most recent world, eye0 and eye1 images... latest message was {topic}")
+        if recent_world is not None and recent_eye0 is not None and recent_eye1 is not None:
+            cv2.imshow("world", recent_world)
+            cv2.imshow("eye0", recent_eye0)
+            cv2.imshow("eye1", recent_eye1)
+            cv2.waitKey(1)
+            pass  # here you can do calculation on the 3 most recent world, eye0 and eye1 images
+except KeyboardInterrupt:
+    pass
+finally:
+    cv2.destroyAllWindows()
