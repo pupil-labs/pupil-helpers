@@ -24,6 +24,6 @@ optional arguments:
 ## Visualize LSL Recording
 
 The Jupyter Notebook loads the prerecorded `lsl-recording.csv` and gives examples on how to 
-- Filtere the recorded data by confidence
+- Filter the recorded data by confidence
 - Visualize the recorded gaze distribution
 - Visualize the2d and 3d diameter over time
