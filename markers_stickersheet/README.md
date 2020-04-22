@@ -1,9 +1,20 @@
 # Create Marker Sheets
 
 Here you can find example scripts for creating your custom marker sheets.
+To be able to run the scripts, please install (from within this directory) the required dependencies with
+```
+python -m pip install -r requirements.txt
+```
 
 The original Apriltag markers can be found in the submodule folder [apriltag-imgs](./apriltag-imgs).
-If you clone this repository, make sure to clone the submodule as well!
+If you clone this repository, make sure to clone the submodule as well with:
+```
+git clone --recursive https://github.com/pupil-labs/pupil-helpers.git
+```
+If you already cloned this repository, you can pull in the submodule with
+```
+git submodule update --init
+```
 
 The script [`create_full_marker_pdfs.py`](./create_full_marker_pdfs.py) creates a PDF from all markers of a family, with one marker per page.
 You can easily use this to generate your own sheets by just printing multiple PDF pages per page.
