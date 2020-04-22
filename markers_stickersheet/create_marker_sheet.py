@@ -7,7 +7,9 @@ import numpy as np
 # The output file name will be:
 #   apriltags_<FAMILY>_<FIRSTID>-<LASTID>.png
 FAMILY = "tag36h11"
-PAGE = 1
+PAGE = 0
+
+IMGS_DIR = "apriltag-imgs"
 
 if __name__ == "__main__":
 
@@ -23,7 +25,7 @@ if __name__ == "__main__":
     last = first + n_images - 1
 
     # Load images
-    files = sorted(str(path) for path in Path(FAMILY).glob("tag*.png"))
+    files = sorted(str(path) for path in (Path(IMGS_DIR) / FAMILY).glob("tag*.png"))
     files = files[first : first + n_images]
     images = [cv2.imread(img_file, cv2.IMREAD_GRAYSCALE) for img_file in files]
 
