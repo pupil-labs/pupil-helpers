@@ -28,9 +28,6 @@ def notify(notification):
     return req.recv_string()
 
 
-# Start frame publisher with format BGR
-notify({'subject': 'start_plugin', 'name': 'Frame_Publisher', 'args': {'format': 'bgr'}})
-
 # open a sub port to listen to pupil
 sub = context.socket(zmq.SUB)
 sub.connect("tcp://{}:{}".format(addr, sub_port))
@@ -63,9 +60,21 @@ recent_world = None
 recent_eye0 = None
 recent_eye1 = None
 
+
+FRAME_FORMAT = 'bgr'
+
+
+# Set the frame format via the Network API plugin
+notify({'subject': 'frame_publishing.set_format', 'format': FRAME_FORMAT})
+
 try:
     while True:
         topic, msg = recv_from_sub()
+
+        if topic.startswith('frame.') and msg['format'] != FRAME_FORMAT:
+            print(f"different frame format ({msg['format']}); skipping frame from {topic}")
+            continue
+
         if topic == 'frame.world':
             recent_world = np.frombuffer(msg['__raw_data__'][0], dtype=np.uint8).reshape(msg['height'], msg['width'], 3)
         elif topic == 'frame.eye.0':
