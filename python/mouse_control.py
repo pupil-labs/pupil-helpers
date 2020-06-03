@@ -15,38 +15,20 @@ from msgpack import loads
 import subprocess as sp
 from platform import system
 
-if system() != "Darwin":
+try:
     from pymouse import PyMouse
+except ImportError:
+    msg = """
+    Please install PyMouse from PyUserInput
+    https://github.com/PyUserInput/PyUserInput
 
-    m = PyMouse()
-    m.move(0, 0)  # hack to init PyMouse -- still needed
-
-
-def move_mouse(x, y, click=False):
-    if system() == "Darwin":
-        sp.Popen(
-            [
-                "./mac_os_helpers/mouse",
-                "-x",
-                str(x),
-                "-y",
-                str(y),
-                "-click",
-                str(int(click)),
-            ]
-        )
-    else:
-        m.move(x, y)
+    pip install PyUserInput
+    """
+    print(msg)
+    exit(1)
 
 
-def get_screen_size():
-    if system() == "Darwin":
-        screen_size = (
-            sp.check_output(["./mac_os_helpers/get_screen_size"]).decode().split(",")
-        )
-        return float(screen_size[0]), float(screen_size[1])
-    else:
-        return m.screen_size()
+m = PyMouse()
 
 
 context = zmq.Context()
@@ -67,7 +49,7 @@ sub.setsockopt_string(zmq.SUBSCRIBE, f"surfaces.{surface_name}")
 smooth_x, smooth_y = 0.5, 0.5
 
 # screen size
-x_dim, y_dim = get_screen_size()
+x_dim, y_dim = m.screen_size()
 print("x_dim: {}, y_dim: {}".format(x_dim, y_dim))
 
 while True:
@@ -98,4 +80,4 @@ while True:
             y = min(y_dim - 10, max(10, y))
 
             # print "%s,%s\n" %(x,y)
-            move_mouse(int(x), int(y))
+            m.move(int(x), int(y))
