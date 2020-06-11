@@ -9,18 +9,16 @@ Implementing other messages to be send as well is a matter of renaming the varia
 import zmq
 import serial
 from msgpack import loads
-from pupil_remote_control import Requester
 
 context = zmq.Context()
 addr = '127.0.0.1'  # remote ip or localhost
 req_port = 50020  # same as in the pupil remote gui
-url = "tcp://{}:{}".format(addr, req_port)
-
-# initialize Pupil Remote utility
-req = Requester(context, url)
+req = context.socket(zmq.REQ)
+req.connect("tcp://{}:{}".format(addr, req_port))
 
 # ask for the sub port
-sub_port = req.send_cmd('SUB_PORT')
+req.send_string('SUB_PORT')
+sub_port = req.recv_string()
 
 # open a sub port to listen to pupil
 sub = context.socket(zmq.SUB)
