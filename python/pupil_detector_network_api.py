@@ -88,7 +88,6 @@ class PupilDetectorNetworkApi:
 
     def set_properties(
         self,
-        name: str,
         values: dict,
         detector_name: str,  # NOTE: required, since property names are specific to a given detector
         eye_id: T.Optional[int] = None,
