@@ -55,6 +55,11 @@ def recv_from_sub():
     return topic, payload
 
 
+def has_new_data_available():
+    # Returns True as long subscription socket has received data queued for processing
+    return sub.get(zmq.EVENTS) & zmq.POLLIN
+
+
 recent_world = None
 recent_eye0 = None
 recent_eye1 = None
@@ -67,26 +72,36 @@ FRAME_FORMAT = "bgr"
 notify({"subject": "frame_publishing.set_format", "format": FRAME_FORMAT})
 
 while True:
-    topic, msg = recv_from_sub()
+    # The subscription socket receives data in the background and queues it for
+    # processing. Once the queue is full, it will stop receiving data until the
+    # queue is being processed. In other words, the code for processing the queue
+    # needs to be faster than the incoming data.
+    # e.g. we are subscribed to scene (30 Hz) and eye images (2x 120 Hz), resulting
+    # in 270 images per second.
+    while has_new_data_available():
+        topic, msg = recv_from_sub()
 
-    if topic.startswith("frame.") and msg["format"] != FRAME_FORMAT:
-        print(f"different frame format ({msg['format']}); skipping frame from {topic}")
-        continue
+        if topic.startswith("frame.") and msg["format"] != FRAME_FORMAT:
+            print(
+                f"different frame format ({msg['format']}); skipping frame from {topic}"
+            )
+            continue
 
-    if topic == "frame.world":
-        recent_world = np.frombuffer(msg["__raw_data__"][0], dtype=np.uint8).reshape(
-            msg["height"], msg["width"], 3
-        )
-    elif topic == "frame.eye.0":
-        recent_eye0 = np.frombuffer(msg["__raw_data__"][0], dtype=np.uint8).reshape(
-            msg["height"], msg["width"], 3
-        )
-    elif topic == "frame.eye.1":
-        recent_eye1 = np.frombuffer(msg["__raw_data__"][0], dtype=np.uint8).reshape(
-            msg["height"], msg["width"], 3
-        )
+        if topic == "frame.world":
+            recent_world = np.frombuffer(
+                msg["__raw_data__"][0], dtype=np.uint8
+            ).reshape(msg["height"], msg["width"], 3)
+        elif topic == "frame.eye.0":
+            recent_eye0 = np.frombuffer(msg["__raw_data__"][0], dtype=np.uint8).reshape(
+                msg["height"], msg["width"], 3
+            )
+        elif topic == "frame.eye.1":
+            recent_eye1 = np.frombuffer(msg["__raw_data__"][0], dtype=np.uint8).reshape(
+                msg["height"], msg["width"], 3
+            )
 
     if recent_world is not None and recent_eye0 is not None and recent_eye1 is not None:
         print(
-            f"here you can do calculation on the 3 most recent world, eye0 and eye1 images... latest message was {topic}"
+            "here you can do calculation on the 3 most recent world, eye0 and eye1 "
+            f"images... latest message was {topic}"
         )
