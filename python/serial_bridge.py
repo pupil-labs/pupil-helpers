@@ -31,7 +31,7 @@ ser = serial.Serial("/dev/tty.usbserial", 9600)  # point to arduino
 while True:
     topic = sub.recv_string()
     msg = sub.recv()  # bytes
-    pupil_position = loads(msg, encoding="utf-8")
+    pupil_position = loads(msg, raw=False)
     x, y = pupil_position["norm_pos"]
     print(x, y)
     ser.write(x)

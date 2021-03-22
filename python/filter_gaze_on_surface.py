@@ -28,7 +28,7 @@ while True:
     try:
         topic = sub.recv_string()
         msg = sub.recv()  # bytes
-        surfaces = loads(msg, encoding="utf-8")
+        surfaces = loads(msg, raw=False)
         filtered_surface = {
             k: v for k, v in surfaces.items() if surfaces["name"] == surface_name
         }

@@ -47,7 +47,7 @@ def recv_from_sub():
     in the payload dict with key: '__raw_data__' .
     """
     topic = sub.recv_string()
-    payload = unpackb(sub.recv(), encoding="utf-8")
+    payload = unpackb(sub.recv(), raw=False)
     extra_frames = []
     while sub.get(zmq.RCVMORE):
         extra_frames.append(sub.recv())

@@ -41,7 +41,7 @@ class PupilDetectorNetworkApi:
     def recv_sub(self) -> T.Tuple[str, T.Any]:
         topic = self.sub_socket.recv_string()
         payload = self.sub_socket.recv()
-        payload = serializer.loads(payload, encoding="utf-8")
+        payload = serializer.loads(payload, raw=False)
         return topic, payload
 
     # Pupil Detector Plugin Network API

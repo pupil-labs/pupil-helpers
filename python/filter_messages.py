@@ -32,7 +32,7 @@ while True:
     try:
         topic = sub.recv_string()
         msg = sub.recv()
-        msg = loads(msg, encoding="utf-8")
+        msg = loads(msg, raw=False)
         print("\n{}: {}".format(topic, msg))
     except KeyboardInterrupt:
         break

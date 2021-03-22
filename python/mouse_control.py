@@ -54,7 +54,7 @@ print("x_dim: {}, y_dim: {}".format(x_dim, y_dim))
 
 while True:
     topic, msg = sub.recv_multipart()
-    gaze_position = loads(msg, encoding="utf-8")
+    gaze_position = loads(msg, raw=False)
     if gaze_position["name"] == surface_name:
         gaze_on_screen = gaze_position["gaze_on_surfaces"]
         if len(gaze_on_screen) > 0:
