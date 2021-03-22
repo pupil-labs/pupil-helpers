@@ -60,7 +60,7 @@ if __name__ == "__main__":
     pupil_remote.send_string("R")
     pupil_remote.recv_string()
 
-    sleep(1.)  # sleep for a few seconds, can be less
+    sleep(1.0)  # sleep for a few seconds, can be less
 
     # Send a trigger with the current time
     # The annotation will be saved to annotation.pldata if a
@@ -76,10 +76,10 @@ if __name__ == "__main__":
         }
 
     label = "custom_annotation_label"
-    duration = 0.
+    duration = 0.0
     minimal_trigger = new_trigger(label, duration)
     send_trigger(minimal_trigger)
-    sleep(1.)  # sleep for a few seconds, can be less
+    sleep(1.0)  # sleep for a few seconds, can be less
 
     minimal_trigger = new_trigger(label, duration)
     send_trigger(minimal_trigger)
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     # add custom keys to your annotation
     minimal_trigger["custom_key"] = "custom value"
     send_trigger(minimal_trigger)
-    sleep(1.)  # sleep for a few seconds, can be less
+    sleep(1.0)  # sleep for a few seconds, can be less
 
     # stop recording
     pupil_remote.send_string("r")
