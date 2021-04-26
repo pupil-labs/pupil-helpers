@@ -21,6 +21,9 @@ Receive and visualize scene and eye camera images in real-time from Pupil Captur
 - [`serial_bridge.py`](serial_bridge.py):
 Script that receives [pupil data](https://docs.pupil-labs.com/core/terminology/#pupil-positions)
 in real-time from Pupil Capture or Pupil Service and relays it via a serial interface.
+- [`simple_realtime_time_sync.py`](simple_realtime_time_sync.py): Script that calculates
+offset between local and remote pupil clock. Offset can be used to create time-synchronized
+time measurements in your local experiment.
 - [`test_pupil_detector_network_api.py`](test_pupil_detector_network_api.py):
 Retrieve and set pupil detection configuration in Pupil Capture or Pupil Service.
 
