@@ -91,15 +91,12 @@ def main(ip_address: str = "127.0.0.1", port: int = 50020):
 
 def check_capture_exists(ip_address, port):
     """check pupil capture instance exists"""
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    if not sock.connect_ex((ip_address, port)):
-        print('Found Pupil Capture')
-    else:
-        print('Cannot find Pupil Capture')
-        sys.exit()
-
-    sock.close()
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        if not sock.connect_ex((ip_address, port)):
+            print("Found Pupil Capture")
+        else:
+            print("Cannot find Pupil Capture")
+            sys.exit()
 
 
 def setup_pupil_remote_connection(ip_address, port):
