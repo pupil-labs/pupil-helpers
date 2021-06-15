@@ -11,8 +11,9 @@
 """
 This example demonstrates how to send annotations via Pupil Remote. 
 
-In order to ensure accurate alignment of this script's local clock with Pupil Time, we implement 
-a simple real-time sync protocol. For more information, please see 'simple_realtime_time_sync.py'
+In order to ensure accurate alignment of this script's local clock with Pupil Time, we
+implement a simple real-time sync protocol. For more information, please see
+'simple_realtime_time_sync.py'
 """
 
 import zmq
@@ -40,9 +41,7 @@ def main(ip_address: str = "127.0.0.1", port: int = 50020):
 
     # 3. Measure clock offset accounting for network latency
     stable_offset_mean = measure_clock_offset_stable(
-        pupil_remote,
-        clock_function=local_clock,
-        n_samples=10
+        pupil_remote, clock_function=local_clock, n_samples=10
     )
 
     pupil_time_actual = request_pupil_time(pupil_remote)
@@ -55,7 +54,10 @@ def main(ip_address: str = "127.0.0.1", port: int = 50020):
 
     # 4. Prepare and send annotations
     # Start the annotations plugin
-    notify(pupil_remote, {"subject": "start_plugin", "name": "Annotation_Capture", "args": {}})
+    notify(
+        pupil_remote,
+        {"subject": "start_plugin", "name": "Annotation_Capture", "args": {}},
+    )
 
     # start a recording (necessary for this example script)
     pupil_remote.send_string("R")
@@ -63,10 +65,12 @@ def main(ip_address: str = "127.0.0.1", port: int = 50020):
     time.sleep(1.0)  # sleep for a few seconds, can be less
 
     # Send an annotation.
-    # We send a timestamp sampled from the local clock (e.g. that corresponds to a trigger event, or a stimulus that
-    # was presented). The clock offset that we measured in step 3 will be added to the timestamp to correctly align it
-    # with Pupil Time. The annotation will be saved to annotation.pldata if a recording is running. The
-    # Annotation_Player plugin will automatically retrieve, display and export all recorded annotations.
+    # We send a timestamp sampled from the local clock (e.g. that corresponds to a
+    # trigger event, or a stimulus that was presented). The clock offset that we
+    # measured in step 3 will be added to the timestamp to correctly align it with
+    # Pupil Time. The annotation will be saved to annotation.pldata if a recording is
+    # running. The Annotation_Player plugin will automatically retrieve, display and
+    # export all recorded annotations.
     local_time = local_clock()
     label = "custom_annotation_label"
     duration = 0.0
@@ -103,8 +107,8 @@ def setup_pupil_remote_connection(ip_address, port):
     """Creates a zmq-REQ socket and connects it to Pupil Capture or Service
     to send and receive notifications.
 
-    We also set up a PUB socket to send the annotations. This is necessary to write messages
-    to the IPC Backbone other than notifications
+    We also set up a PUB socket to send the annotations. This is necessary to write
+    messages to the IPC Backbone other than notifications
 
     See https://docs.pupil-labs.com/developer/core/network-api/ for details.
     """
@@ -170,7 +174,9 @@ def measure_clock_offset_stable(pupil_remote, clock_function, n_samples=10):
     accuracy of the time sync.
     """
     assert n_samples > 0, "Requires at least one sample"
-    offsets = [measure_clock_offset(pupil_remote, clock_function) for x in range(n_samples)]
+    offsets = [
+        measure_clock_offset(pupil_remote, clock_function) for x in range(n_samples)
+    ]
     return sum(offsets) / len(offsets)  # mean offset
 
 
