@@ -1,3 +1,4 @@
+aiortsp
 opencv-python
 requests
 zeroconf
