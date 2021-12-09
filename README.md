@@ -4,9 +4,9 @@ The pupil-helpers repository contains utility scripts and concise code examples 
 
 If you're new to Pupil, we highly recommend checking out the [docs](https://docs.pupil-labs.com).
 
-For documentation on Pupil's message based API, please read through the [Networking](https://docs.pupil-labs.com/#networking) section in the docs.
+For documentation on Pupil's message based API, please read through the [Networking](https://docs.pupil-labs.com/developer/core/network-api/) section in the docs.
 
-For more information about plugin development, check out the [Plugin Guide](https://docs.pupil-labs.com/#plugin-guide).
+For more information about plugin development, check out the [Plugin Guide](https://docs.pupil-labs.com/developer/core/plugin-api/).
 
 
 #### Folder Content
