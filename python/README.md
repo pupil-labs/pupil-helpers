@@ -43,3 +43,8 @@ For some of the examples you will need additonal depencies in order to run them:
 - `recv_world_video_frames.py`: `pip install numpy`
 - `recv_world_video_frames_with_visualization.py `: `pip install numpy opencv-python`
 - `serial_bridge.py`: `pip install pyserial`
+
+## Pupil Core Network Client
+
+Instead of copying some of the examples above, you can use their functionality via the
+[Pupil Core network client Python module](https://pupil-core-network-client.readthedocs.io/en/latest/).
