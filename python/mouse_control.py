@@ -16,19 +16,32 @@ import subprocess as sp
 from platform import system
 
 try:
-    from pymouse import PyMouse
+    from pynput.mouse import Controller
 except ImportError:
     msg = """
-    Please install PyMouse from PyUserInput
-    https://github.com/PyUserInput/PyUserInput
+    Please install pynput
+    https://github.com/moses-palmer/pynput
 
-    pip install PyUserInput
+    pip install pynput
     """
     print(msg)
     exit(1)
 
+try:
+    import screeninfo
+except ImportError:
+    msg = """
+    Please install pynput
+    https://github.com/rr-/screeninfo
 
-m = PyMouse()
+    pip install screeninfo
+    """
+    print(msg)
+    exit(1)
+    
+
+
+m = Controller()
 
 
 context = zmq.Context()
@@ -49,7 +62,8 @@ sub.setsockopt_string(zmq.SUBSCRIBE, f"surfaces.{surface_name}")
 smooth_x, smooth_y = 0.5, 0.5
 
 # screen size
-x_dim, y_dim = m.screen_size()
+monitor = screeninfo.get_monitors()[0]
+x_dim, y_dim = monitor.width, monitor.height
 print("x_dim: {}, y_dim: {}".format(x_dim, y_dim))
 
 while True:
@@ -79,5 +93,5 @@ while True:
             x = min(x_dim - 10, max(10, x))
             y = min(y_dim - 10, max(10, y))
 
-            # print "%s,%s\n" %(x,y)
-            m.move(int(x), int(y))
+            # print("%s,%s\n" %(x,y))
+            m.position = (int(x), int(y))
